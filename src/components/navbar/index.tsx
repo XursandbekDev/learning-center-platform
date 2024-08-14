@@ -1,13 +1,33 @@
 import React, { useState } from 'react';
 import Sidebar from '../sidebar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiLogOut } from "react-icons/fi";
+import ConfirmationModal from '../modal/ConfirmationModal';
+
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate()
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+    setIsSidebarOpen(!isSidebarOpen);
   };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+const handleConfirmLogout = () => {
+    localStorage.removeItem("token");
+    closeModal();
+    console.log("Token removed:", !localStorage.getItem("token"));
+    console.log("Logging out...");
+    navigate("/auth/login");
+};
 
   return (
     <header className="bg-blue-900 dark:bg-gray-800 text-white">
@@ -34,29 +54,26 @@ const Navbar: React.FC = () => {
               ></path>
             </svg>
           </button>
-          <a href="#" className="text-xl font-semibold whitespace-nowrap ms-3">
-            MyApp
-          </a>
-        </div>
-        <div className='hidden sm:flex  space-x-4 pr-6' >
-          <Link to={"/auth/login"} className='text-2xl'>
-            <FiLogOut />
+          <Link to={"/"} className="text-xl font-semibold whitespace-nowrap ms-3">
+            Stanford
           </Link>
         </div>
-        {/* <div className="hidden sm:flex space-x-4">
-          <a href="#" className="hover:underline">
-            Dashboard
-          </a>
-          <a href="#" className="hover:underline">
-            Profile
-          </a>
-          <a href="#" className="hover:underline">
-            Settings
-          </a>
-        </div> */}
+        <div className="flex space-x-4 pr-6">
+          <button onClick={openModal} className="text-2xl">
+            <FiLogOut />
+          </button>
+        </div>
       </nav>
 
-      <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        onConfirm={handleConfirmLogout}
+      />
+
+      {/* Sidebar */}
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
     </header>
   );
 };

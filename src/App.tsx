@@ -10,9 +10,9 @@ import './index.css';
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const isLoginPage = location.pathname === '/auth/login';
-  
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -23,11 +23,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <>
           {/* Sidebar component */}
           <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-  
+
           <div className="flex-1 flex flex-col">
             {/* Navbar component */}
-            <Navbar  />
-  
+            <Navbar />
+
             {/* Main Content */}
             <main className="flex-1 p-4 sm:ml-64">
               {children}
@@ -52,7 +52,7 @@ const App: React.FC = () => {
           <Route path="/auth/login" element={<Login />} />
           {/* <Route path="/admin" element={<Admin />} /> */}
           <Route path="/home" element={<Home />} />
-          <Route path="/" element={<Navigate to="/home" />} />
+          <Route path="/" element={<Navigate to="/auth/login" />} />
         </Routes>
       </Layout>
     </Router>

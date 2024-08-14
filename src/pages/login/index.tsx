@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { IoMdEyeOff } from "react-icons/io"; // close
@@ -12,6 +12,16 @@ const Login: React.FC = () => {
     const [error, setError] = useState<string>('');
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate('/home');
+        }
+        else if (!token) {
+            navigate("/auth/login")
+        }
+    }, [navigate]);
+
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -21,7 +31,7 @@ const Login: React.FC = () => {
 
             if (email === AdminData.email && password === AdminData.password) {
                 localStorage.setItem('token', 'fake-admin-token');
-                navigate('/dashboard');
+                navigate('/home');
                 setError('');
             } else {
                 setError('Noto‘g‘ri email yoki parol!');
@@ -100,14 +110,3 @@ const Login: React.FC = () => {
 };
 
 export default Login;
-
-
-// useEffect(() => {
-//     const token = localStorage.getItem('token');
-//     if (token) {
-//         navigate('/dashboard');
-//     }
-//     else if (!token) {
-//         navigate("/")
-//     }
-// }, [navigate]);
